@@ -1,4 +1,3 @@
-// controllers/foods.ts
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import foodCartModel from "../../schema/foodCart.model";
@@ -11,12 +10,10 @@ export const createFoodCart = async (req: Request, res: Response) => {
     if (!mongoose.Types.ObjectId.isValid(user_id)) {
       return res.status(400).json({ message: "Invalid user_id" });
     }
-
     if (!mongoose.Types.ObjectId.isValid(food_id)) {
       return res.status(400).json({ message: "Invalid food_id" });
     }
-
-    if (!quantity || typeof quantity !== "number" || quantity <= 0) {
+    if (typeof quantity !== "number" || quantity <= 0) {
       return res.status(400).json({ message: "Invalid quantity" });
     }
 
@@ -25,29 +22,24 @@ export const createFoodCart = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Food not found" });
     }
 
-    let cartItem = await foodCartModel.findOne({ user_id, food_id });
+    const cart = await foodCartModel.create({
+      user_id,
+      foodOrderitems: [{ food: food_id, quantity }],
+    });
 
-    if (cartItem) {
-      cartItem.quantity += quantity;
-      await cartItem.save();
-    } else {
-      cartItem = await foodCartModel.create({ user_id, food_id, quantity });
-    }
-
-    const populatedCart = await foodCartModel.findById(cartItem._id).populate({
-      path: "food_id",
-      select: "food_name food_price poster_img",
+    const populatedCart = await foodCartModel.findById(cart._id).populate({
+      path: "foodOrderitems.food",
     });
 
     res.status(201).json({
-      message: "Food added to cart successfully",
+      message: "Food order created successfully",
       data: populatedCart,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Create Food Cart Error:", error);
     res.status(500).json({
       message: "Server error",
-      error: error.message,
+      error,
     });
   }
 };

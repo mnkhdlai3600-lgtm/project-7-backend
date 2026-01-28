@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { UserModel } from "../../schema";
+import UserModel from "../../schema/user.model";
 
 export const updateUserByEmail = async (req: Request, res: Response) => {
   try {

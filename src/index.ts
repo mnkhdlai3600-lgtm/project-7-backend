@@ -4,7 +4,8 @@ import express, { Application, Request, Response } from "express";
 import { connectToMongoDB } from "./mongoDB";
 import { userRouter } from "./router";
 import foodRouter from "./router/food.router";
-import foodCart from "./router/food-cart.router";
+import authenticationRouter from "./router/authentication.router";
+import foodCartRouter from "./router/food-cart.router";
 
 configDotenv();
 
@@ -15,8 +16,9 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/users", userRouter);
-app.use("/food", foodRouter);
-app.use("/food-cart", foodCart);
+app.use("/foods", foodRouter);
+app.use("/food-carts", foodCartRouter);
+app.use("/authentication", authenticationRouter);
 
 const startServer = async () => {
   try {

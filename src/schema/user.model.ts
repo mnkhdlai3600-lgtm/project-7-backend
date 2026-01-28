@@ -1,24 +1,31 @@
 import mongoose, { model, models, Schema, Document, Model } from "mongoose";
 
-type User = {
-  user_name: string;
-  email: string;
-  phone_number?: number;
-  user_age?: number;
-};
+enum userRoles {
+  User = "User",
+  Admin = "Admin",
+}
 
-interface IUserDocument extends User, Document {}
-
-const UserSchema = new Schema<IUserDocument>(
+const UserSchema = new Schema(
   {
-    user_name: { type: String, required: true },
+    user_name: { type: String, unique: true },
     email: { type: String, required: true, unique: true },
-    phone_number: { type: Number, required: false },
+    password: { type: String, required: true },
+    address: { type: String },
+    phone_number: { type: Number },
+    ordered_foods: { types: Schema.ObjectId },
+    role: {
+      type: String,
+      enum: Object.values(userRoles),
+      default: userRoles.User,
+    },
+    phone_verified: { type: Boolean, default: false },
+    orederedFood: { type: Schema.Types.ObjectId, ref: "FoodCart" },
+    ttl: { type: Date },
+    isVerified: { type: Boolean, default: false },
     user_age: { type: Number, required: false },
   },
   { timestamps: true },
 );
 
-export const UserModel: Model<IUserDocument> = models.Users
-  ? (models.Users as Model<IUserDocument>)
-  : model<IUserDocument>("Users", UserSchema);
+const UserModel = models.User || model("Users", UserSchema);
+export default UserModel;

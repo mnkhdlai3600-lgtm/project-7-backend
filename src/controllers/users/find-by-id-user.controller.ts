@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { UserModel } from "../../schema";
+import UserModel from "../../schema/user.model";
 
 export const findByIdUser = async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
-
+    const data = req.params;
     if (!userId) {
       res.status(400).json({ message: "User ID байхгүй байна" });
       return;
@@ -13,7 +13,7 @@ export const findByIdUser = async (req: Request, res: Response) => {
     const userById = await UserModel.findById(userId);
 
     if (userId) {
-      res.status(200).json({ message: "Success", userById });
+      res.status(200).json({ message: "Success", data: data });
     }
 
     if (!userById) {

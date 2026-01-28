@@ -1,23 +1,15 @@
 import { model, models, Schema } from "mongoose";
 
-type Food = {
-  food_name: string;
-  food_description: string;
-  food_price: string;
-  back_drop_img: string;
-  poster_img: string;
-};
-
-const foodSchema = new Schema<Food>(
+const foodSchema = new Schema(
   {
     food_name: { type: String, required: true },
-    food_description: { type: String, required: true },
     food_price: { type: String, required: true },
-    back_drop_img: { type: String, required: true },
-    poster_img: { type: String, required: true },
+    image: { type: String, required: true },
+    ingredients: { type: String, required: true },
+    category: { type: Schema.Types.ObjectId, require: true, ref: "Category" },
   },
   { timestamps: true },
 );
 
-const FoodModel = models.Food || model("Food", foodSchema);
+const FoodModel = models.Foods || model("Foods", foodSchema);
 export default FoodModel;

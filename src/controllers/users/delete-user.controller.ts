@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
-import { UserModel } from "../../schema";
-
+import UserModel from "../../schema/user.model";
 type DeleteUserFilter = {
   email?: string;
   user_name?: string;
@@ -41,6 +40,7 @@ export const deleteUser = async (req: Request, res: Response) => {
     return res.status(500).json({
       success: false,
       message: "Server error",
+      error: (error as Error).message,
     });
   }
 };

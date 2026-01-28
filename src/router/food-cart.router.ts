@@ -1,9 +1,9 @@
 // routes/foodCart.ts
 import { Router } from "express";
-import { createFoodCart } from "../controllers/foods";
+import { createFoodCart } from "../controllers/food-order";
 
-const foodCart = Router();
+const foodCartRouter = Router();
 
-foodCart.post("/create-food-cart", createFoodCart);
+foodCartRouter.post("/create-food-cart", createFoodCart);
 
-export default foodCart;
+export default foodCartRouter;
