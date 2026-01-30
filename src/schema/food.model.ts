@@ -1,14 +1,14 @@
-import { model, models, Schema } from "mongoose";
+import { Schema, model, models } from "mongoose";
 
 const FoodSchema = new Schema(
   {
-    food_name: { type: String, required: true },
-    food_price: { type: String, required: true },
+    name: { type: String, required: true, trim: true },
+    price: { type: Number, required: true, min: 0 },
     image: { type: String, required: true },
-    ingredients: { type: String, required: true },
+    ingredients: [String],
+    isAvailable: { type: Boolean, default: true },
   },
   { timestamps: true },
 );
 
-const FoodModel = models.Foods || model("Foods", FoodSchema);
-export default FoodModel;
+export default models.Foods || model("Foods", FoodSchema);

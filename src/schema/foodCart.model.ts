@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import { model, models, Schema } from "mongoose";
 
 enum FoodOrderStatusEnum {
   PENDING = "pending",
@@ -7,25 +7,38 @@ enum FoodOrderStatusEnum {
   CANCELLED = "cancelled",
 }
 
-const FoodCartSchema = new Schema(
+const FoodCartItemSchema = new Schema(
   {
-    food: { type: Schema.Types.ObjectId, required: true, ref: "Foods" },
-    quantity: { type: Number, required: true },
+    food: {
+      type: Schema.Types.ObjectId,
+      ref: "Foods",
+      required: true,
+    },
+    quantity: {
+      type: Number,
+      required: true,
+    },
   },
   { _id: false },
 );
 
-const FoodCartModel = new Schema(
+const FoodCartSchema = new Schema(
   {
-    user_id: { type: Schema.Types.ObjectId, required: true, ref: "Users" },
-    foodOrderitems: [FoodCartSchema],
+    user_id: {
+      type: Schema.Types.ObjectId,
+      ref: "Users",
+      required: true,
+    },
+
+    foodOrderitems: [FoodCartItemSchema],
+
     status: {
       type: String,
-      enum: FoodOrderStatusEnum,
+      enum: Object.values(FoodOrderStatusEnum), // ⭐ fix
       default: FoodOrderStatusEnum.PENDING,
     },
   },
   { timestamps: true },
 );
 
-export default model("food-carts", FoodCartModel);
+export default models["food-carts"] || model("food-carts", FoodCartSchema);

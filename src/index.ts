@@ -18,8 +18,8 @@ app.use(express.json());
 
 app.use("/foods", foodRouter);
 app.use("/food-carts", foodCartRouter);
-app.use("/authentication", authenticationRouter);
 app.use("/food-category", categoryRouter);
+app.use("/authentication", authenticationRouter);
 
 const startServer = async () => {
   try {

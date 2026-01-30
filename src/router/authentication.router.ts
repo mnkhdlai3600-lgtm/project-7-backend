@@ -1,6 +1,5 @@
 import { Router } from "express";
 import {
-  deleteUser,
   refreshController,
   resetPasswordController,
   resetPasswordRequestController,
@@ -8,6 +7,9 @@ import {
   signUpController,
   verifyResetPasswordRequestController,
 } from "../controllers/authentication";
+import { verifyEmailController } from "../controllers/authentication/verify-email.controller";
+import { findByIdUser } from "../controllers/authentication/find-by-id-user.controller";
+import { deleteUser } from "../controllers/authentication/delete-user.controller";
 
 const authenticationRouter = Router();
 
@@ -23,6 +25,7 @@ authenticationRouter.post(
   "/verify-reset-password-request",
   verifyResetPasswordRequestController,
 );
+authenticationRouter.get("/user-by-id/:id", findByIdUser);
 authenticationRouter.delete("/delete-user/:email", deleteUser);
-
+authenticationRouter.get("/verify-email", verifyEmailController);
 export default authenticationRouter;

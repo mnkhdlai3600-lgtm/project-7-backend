@@ -2,44 +2,44 @@ import { Request, Response } from "express";
 import mongoose from "mongoose";
 import foodCartModel from "../../schema/foodCart.model";
 import FoodModel from "../../schema/food.model";
+import UserModel from "../../schema/user.model";
 
 export const createFoodCart = async (req: Request, res: Response) => {
   try {
     const { user_id, food_id, quantity } = req.body;
 
-    if (!mongoose.Types.ObjectId.isValid(user_id)) {
+    if (!mongoose.Types.ObjectId.isValid(user_id))
       return res.status(400).json({ message: "Invalid user_id" });
-    }
-    if (!mongoose.Types.ObjectId.isValid(food_id)) {
+
+    if (!mongoose.Types.ObjectId.isValid(food_id))
       return res.status(400).json({ message: "Invalid food_id" });
-    }
-    if (typeof quantity !== "number" || quantity <= 0) {
+
+    if (!quantity || quantity <= 0)
       return res.status(400).json({ message: "Invalid quantity" });
-    }
 
     const food = await FoodModel.findById(food_id);
-    if (!food) {
-      return res.status(404).json({ message: "Food not found" });
-    }
+    if (!food) return res.status(404).json({ message: "Food not found" });
 
+    // ⭐ create cart
     const cart = await foodCartModel.create({
       user_id,
       foodOrderitems: [{ food: food_id, quantity }],
     });
 
-    const populatedCart = await foodCartModel.findById(cart._id).populate({
-      path: "foodOrderitems.food",
+    // ⭐ USER дээр push (хамгийн чухал)
+    await UserModel.findByIdAndUpdate(user_id, {
+      $push: { orderedFoods: cart._id },
     });
+
+    const populatedCart = await foodCartModel
+      .findById(cart._id)
+      .populate("foodOrderitems.food");
 
     res.status(201).json({
       message: "Food order created successfully",
       data: populatedCart,
     });
   } catch (error) {
-    console.error("Create Food Cart Error:", error);
-    res.status(500).json({
-      message: "Server error",
-      error,
-    });
+    res.status(500).json({ message: "Server error", error });
   }
 };
