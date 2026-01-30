@@ -8,9 +8,8 @@ type DeleteUserFilter = {
 export const deleteUser = async (req: Request, res: Response) => {
   try {
     const { email } = req.params;
-    const { user_name } = req.body as { user_name?: string };
 
-    if (!email && !user_name) {
+    if (!email) {
       return res.status(400).json({
         success: false,
         message: "Email or user_name must be provided",
@@ -19,7 +18,6 @@ export const deleteUser = async (req: Request, res: Response) => {
 
     const filter: DeleteUserFilter = {};
     if (typeof email === "string") filter.email = email;
-    if (typeof user_name === "string") filter.user_name = user_name;
 
     const deletedUser = await UserModel.findOneAndDelete(filter);
 

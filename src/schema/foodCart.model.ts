@@ -7,7 +7,7 @@ enum FoodOrderStatusEnum {
   CANCELLED = "cancelled",
 }
 
-const foodCartSchema = new Schema(
+const FoodCartSchema = new Schema(
   {
     food: { type: Schema.Types.ObjectId, required: true, ref: "Foods" },
     quantity: { type: Number, required: true },
@@ -15,10 +15,10 @@ const foodCartSchema = new Schema(
   { _id: false },
 );
 
-const foodCartModel = new Schema(
+const FoodCartModel = new Schema(
   {
     user_id: { type: Schema.Types.ObjectId, required: true, ref: "Users" },
-    foodOrderitems: [foodCartSchema],
+    foodOrderitems: [FoodCartSchema],
     status: {
       type: String,
       enum: FoodOrderStatusEnum,
@@ -28,4 +28,4 @@ const foodCartModel = new Schema(
   { timestamps: true },
 );
 
-export default model("food-carts", foodCartModel);
+export default model("food-carts", FoodCartModel);

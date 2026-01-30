@@ -1,13 +1,15 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import UserModel from "../../schema/user.model";
+import jwt from "jsonwebtoken";
 
 export const signUpController = async (req: Request, res: Response) => {
   try {
     const { password, email } = req.body;
-    const existingUser = await UserModel.findOne({
-      $or: [{ email }],
+    const token = jwt.sign({ email }, process.env.JWT_SECRET_KEY || "secret", {
+      expiresIn: "1h",
     });
+    const existingUser = await UserModel.findOne({ email });
     if (!existingUser) {
       const hashedPassword = await bcrypt.hash(password, 10);
       const newUser = await UserModel.create({
@@ -17,6 +19,8 @@ export const signUpController = async (req: Request, res: Response) => {
       res.status(201).json({
         success: true,
         data: newUser,
+        token,
+        message: "User registered successfully",
       });
     } else {
       res.status(409).json({ message: "Username or email already exists" });

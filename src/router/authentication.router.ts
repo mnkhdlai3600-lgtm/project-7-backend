@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  deleteUser,
   refreshController,
   resetPasswordController,
   resetPasswordRequestController,
@@ -22,5 +23,6 @@ authenticationRouter.post(
   "/verify-reset-password-request",
   verifyResetPasswordRequestController,
 );
+authenticationRouter.delete("/delete-user/:email", deleteUser);
 
 export default authenticationRouter;
