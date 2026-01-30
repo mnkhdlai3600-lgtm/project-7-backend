@@ -20,13 +20,11 @@ export const createFoodCart = async (req: Request, res: Response) => {
     const food = await FoodModel.findById(food_id);
     if (!food) return res.status(404).json({ message: "Food not found" });
 
-    // ⭐ create cart
     const cart = await foodCartModel.create({
       user_id,
       foodOrderitems: [{ food: food_id, quantity }],
     });
 
-    // ⭐ USER дээр push (хамгийн чухал)
     await UserModel.findByIdAndUpdate(user_id, {
       $push: { orderedFoods: cart._id },
     });

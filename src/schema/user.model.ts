@@ -13,10 +13,7 @@ const UserSchema = new Schema(
     address: String,
     phone_number: Number,
 
-    // ⭐ cart reference
-    orderedFoods: [
-      { type: Schema.Types.ObjectId, ref: "food-carts" }, // ⭐ model name match
-    ],
+    orderedFoods: [{ type: Schema.Types.ObjectId, ref: "food-carts" }],
 
     role: {
       type: String,

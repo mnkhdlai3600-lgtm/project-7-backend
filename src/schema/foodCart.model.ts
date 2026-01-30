@@ -9,32 +9,21 @@ enum FoodOrderStatusEnum {
 
 const FoodCartItemSchema = new Schema(
   {
-    food: {
-      type: Schema.Types.ObjectId,
-      ref: "Foods",
-      required: true,
-    },
-    quantity: {
-      type: Number,
-      required: true,
-    },
+    food: { type: Schema.Types.ObjectId, ref: "Foods", required: true },
+    quantity: { type: Number, required: true },
   },
   { _id: false },
 );
 
 const FoodCartSchema = new Schema(
   {
-    user_id: {
-      type: Schema.Types.ObjectId,
-      ref: "Users",
-      required: true,
-    },
+    user_id: { type: Schema.Types.ObjectId, ref: "Users", required: true },
 
     foodOrderitems: [FoodCartItemSchema],
 
     status: {
       type: String,
-      enum: Object.values(FoodOrderStatusEnum), // ⭐ fix
+      enum: Object.values(FoodOrderStatusEnum),
       default: FoodOrderStatusEnum.PENDING,
     },
   },
