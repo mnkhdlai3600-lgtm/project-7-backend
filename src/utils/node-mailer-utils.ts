@@ -21,28 +21,41 @@ export const sendVerificationEmail = async (
     from: `Food Delivery App ${AUTH_EMAIL}`,
     to: reciever,
     subject: "Verify your email",
-    html: `<div>
-  <a
-    target="_blank"
-    href="${verifyEmail}"
-    style="
-      font-size: 18px;
-      color: white;
-      background-color: #007bff;
-      border: 2px black solid;
-      display: flex;
-      justify-items: center;
-      align-items: center;
-      width: 200px;
-      height: 120px;
-      text-align: center;
-      line-height: 120px;
-      text-decoration: none;
-      border-radius: 8px;
-    "
-    >Verify Email</a
-  >
+    html: `
+<div
+  style="
+    width:600px;
+    margin:0 auto;
+    background-color:rgb(164,212,228);
+    padding:60px 20px;
+    border-radius:20px;
+    text-align:center;
+  "
+>
+  <p style="
+      font-size:18px;
+      font-weight:600;
+      margin-bottom:30px;
+    ">
+    Welcome to our application! Please verify your email address.
+  </p>
 
+  <a
+    href="${verifyEmail}"
+    target="_blank"
+    style="
+      background-color:#007bff;
+      color:white;
+      padding:12px 24px;
+      text-decoration:none;
+      border-radius:6px;
+      font-size:16px;
+      display:inline-block;
+    "
+  >
+    Verify Email
+  </a>
+</div>
 `,
   });
 };
