@@ -5,7 +5,7 @@ import { connectToMongoDB } from "./mongoDB";
 import foodRouter from "./router/food.router";
 import authenticationRouter from "./router/authentication.router";
 import foodCartRouter from "./router/food-order.router";
-import foodCategoryModel from "./schema/foodCategory.model";
+
 import categoryRouter from "./router/category.router";
 
 configDotenv();

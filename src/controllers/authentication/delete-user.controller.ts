@@ -1,25 +1,26 @@
 import { Request, Response } from "express";
 import UserModel from "../../schema/user.model";
-type DeleteUserFilter = {
-  email?: string;
-  user_name?: string;
-};
+import mongoose from "mongoose";
 
 export const deleteUser = async (req: Request, res: Response) => {
   try {
-    const { email } = req.params;
+    const { id } = req.body;
 
-    if (!email) {
+    if (!id) {
       return res.status(400).json({
         success: false,
-        message: "Email or user_name must be provided",
+        message: "User ID is required in request body",
       });
     }
 
-    const filter: DeleteUserFilter = {};
-    if (typeof email === "string") filter.email = email;
+    if (!mongoose.Types.ObjectId.isValid(id as string)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid ID format",
+      });
+    }
 
-    const deletedUser = await UserModel.findOneAndDelete(filter);
+    const deletedUser = await UserModel.findByIdAndDelete(id);
 
     if (!deletedUser) {
       return res.status(404).json({
@@ -28,17 +29,16 @@ export const deleteUser = async (req: Request, res: Response) => {
       });
     }
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       message: "User deleted successfully",
-      data: deletedUser,
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     console.error(error);
     return res.status(500).json({
       success: false,
       message: "Server error",
-      error: (error as Error).message,
+      error: error.message,
     });
   }
 };

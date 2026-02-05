@@ -8,6 +8,8 @@ export const signUpController = async (req: Request, res: Response) => {
   try {
     const { password, email } = req.body;
 
+    const userTTL = new Date(Date.now() + 5 * 60 * 1000);
+
     const existingUser = await UserModel.findOne({ email });
 
     if (existingUser) {
@@ -21,18 +23,17 @@ export const signUpController = async (req: Request, res: Response) => {
     const newUser = await UserModel.create({
       email,
       password: hashedPassword,
-      isVerified: false,
+      ttl: userTTL,
     });
 
-    const token = jwt.sign({ email }, process.env.JWT_SECRET_KEY || "secret", {
+    const token = jwt.sign({ email }, process.env.JWT_SECRET!, {
       expiresIn: 600,
     });
-
+    console.log(token);
     await sendVerificationEmail(
       email,
       `${process.env.TEST_API}/authentication/verify-email?token=${token}`,
     );
-
     return res.status(201).json({
       success: true,
       message: "Verification email sent",

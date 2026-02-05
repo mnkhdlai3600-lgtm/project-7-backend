@@ -1,15 +1,45 @@
 import { Router } from "express";
-import { createNewFood } from "../controllers";
-import { deleteFood } from "../controllers/foods/delete-food.controller";
-import { updateFood } from "../controllers/foods/update-food.controller";
-import { findByIdfood } from "../controllers/foods/get-by-id-food.controller";
+
+import { authentication, authorization } from "../middlewares";
+import {
+  createNewFood,
+  deleteFood,
+  findByIdfood,
+  updateFood,
+} from "../controllers";
 import getFood from "../controllers/foods/get-food.controller";
+import { userRoles } from "../schema";
 const foodRouter = Router();
 
-foodRouter.post("/add-new-food", createNewFood);
-foodRouter.delete("/delete-food/:id", deleteFood);
-foodRouter.put("/update-food/:id", updateFood);
-foodRouter.get("/get-by-id-food/:id", findByIdfood);
-foodRouter.get("/get-food", getFood);
+foodRouter.post(
+  "/add-new-food",
+  authentication,
+  authorization(userRoles.Admin),
+  createNewFood,
+);
+foodRouter.delete(
+  "/delete-food/:id",
+  authentication,
+  authorization(userRoles.Admin),
+  deleteFood,
+);
+foodRouter.put(
+  "/update-food/:id",
+  authentication,
+  authorization(userRoles.Admin),
+  updateFood,
+);
+foodRouter.get(
+  "/get-by-id-food/:id",
+  authentication,
+  authorization(userRoles.Admin),
+  findByIdfood,
+);
+foodRouter.get(
+  "/get-food",
+  authentication,
+  authorization(userRoles.Admin),
+  getFood,
+);
 
 export default foodRouter;

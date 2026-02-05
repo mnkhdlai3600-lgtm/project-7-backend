@@ -2,29 +2,25 @@ import { Request, Response } from "express";
 import mongoose from "mongoose";
 import UserModel from "../../schema/user.model";
 
-export const findByIdUser = async (req: Request, res: Response) => {
+export const findUserEmail = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.id;
+    const UserId = req.params.id;
 
-    if (!mongoose.Types.ObjectId.isValid(userId as string))
-      return res.status(400).json({ message: "Invalid ID" });
+    if (!UserId) {
+      return res
+        .status(400)
+        .json({ message: "Имэйл хаяг заавал шаардлагатай" });
+    }
 
-    const userById = await UserModel.findById(userId)
-      .select("-password")
-      .populate({
-        path: "orderedFoods",
-        populate: {
-          path: "foodOrderitems.food",
-        },
-      });
+    const user = await UserModel.findById({ _id: UserId });
 
-    if (!userById)
+    if (!user) {
       return res.status(404).json({ message: "Хэрэглэгч олдсонгүй" });
+    }
 
-    return res.status(200).json({
-      message: "Success",
-      data: userById,
-    });
+    return res
+      .status(200)
+      .json({ message: "Хэрэглэгч амжилттай олдлоо", data: user });
   } catch (error: any) {
     return res
       .status(500)

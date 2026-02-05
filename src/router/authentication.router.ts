@@ -1,31 +1,54 @@
 import { Router } from "express";
 import {
-  refreshController,
-  resetPasswordController,
+  deleteUser,
+  findUserEmail,
   resetPasswordRequestController,
   signInController,
   signUpController,
-  verifyResetPasswordRequestController,
+  updatePasswordController,
+  updateUserByEmail,
+  verifyEmailController,
+  verifyResetPasswordController,
 } from "../controllers/authentication";
-import { verifyEmailController } from "../controllers/authentication/verify-email.controller";
-import { findByIdUser } from "../controllers/authentication/find-by-id-user.controller";
-import { deleteUser } from "../controllers/authentication/delete-user.controller";
+import { authentication, authorization } from "../middlewares";
+import { userRoles } from "../schema";
+import { refreshToken } from "../controllers/authentication/auth-refresh-token.controller";
 
 const authenticationRouter = Router();
 
-authenticationRouter.post("/refresh-user", refreshController);
+authenticationRouter.post("/sign-in", signInController);
+authenticationRouter.post("/sign-up", signUpController);
+authenticationRouter.get("/refresh-token", refreshToken);
+authenticationRouter.get(
+  "/find-user/:id",
+  authentication,
+  authorization(userRoles.Admin),
+  findUserEmail,
+);
+authenticationRouter.delete(
+  "/delete-user",
+  authentication,
+  authorization(userRoles.Admin),
+  deleteUser,
+);
+authenticationRouter.get("/verify-email", verifyEmailController);
+authenticationRouter.put(
+  "/update-user/:email",
+  authentication,
+  updateUserByEmail,
+);
 authenticationRouter.post(
   "/reset-password-request",
   resetPasswordRequestController,
 );
-authenticationRouter.post("/reset-password", resetPasswordController);
-authenticationRouter.post("/sign-in", signInController);
-authenticationRouter.post("/sign-up", signUpController);
 authenticationRouter.post(
-  "/verify-reset-password-request",
-  verifyResetPasswordRequestController,
+  "/verify-reset-password",
+  verifyResetPasswordController,
 );
-authenticationRouter.get("/user-by-id/:id", findByIdUser);
-authenticationRouter.delete("/delete-user/:email", deleteUser);
-authenticationRouter.get("/verify-email", verifyEmailController);
+authenticationRouter.put(
+  "/reset-password",
+
+  updatePasswordController,
+);
+
 export default authenticationRouter;
