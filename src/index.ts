@@ -21,11 +21,10 @@ app.use("/food-carts", foodCartRouter);
 app.use("/food-category", categoryRouter);
 app.use("/authentication", authenticationRouter);
 
+connectToMongoDB();
+
 const startServer = async () => {
   try {
-    await connectToMongoDB();
-    console.log("MongoDB connected");
-
     app.listen(port, () => {
       console.log(`server is running on port ${port}`);
     });
