@@ -16,10 +16,10 @@ const port = 8000;
 app.use(cors());
 app.use(express.json());
 
-// app.use("/foods", foodRouter);
-// app.use("/food-carts", foodCartRouter);
-// app.use("/food-category", categoryRouter);
-// app.use("/authentication", authenticationRouter);
+app.use("/foods", foodRouter);
+app.use("/food-carts", foodCartRouter);
+app.use("/food-category", categoryRouter);
+app.use("/authentication", authenticationRouter);
 
 connectToMongoDB();
 
