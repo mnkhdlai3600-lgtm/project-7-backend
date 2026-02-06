@@ -13,9 +13,10 @@ export const updateFoodCart = async (req: Request, res: Response) => {
     );
 
     if (!updatedCart) {
-      return res.status(404).json({
+      res.status(404).json({
         message: "Food cart not found",
       });
+      return;
     }
 
     return res.status(200).json({

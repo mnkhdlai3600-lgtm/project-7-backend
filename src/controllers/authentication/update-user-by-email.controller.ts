@@ -7,7 +7,8 @@ export const updateUserByEmail = async (req: Request, res: Response) => {
     const updates = req.body;
 
     if (!userMail) {
-      return res.status(400).json({ message: "Email parameter is required" });
+      res.status(400).json({ message: "Email parameter is required" });
+      return;
     }
 
     const updatedUser = await UserModel.findOneAndUpdate(
@@ -17,12 +18,12 @@ export const updateUserByEmail = async (req: Request, res: Response) => {
     );
 
     if (!updatedUser) {
-      return res.status(404).json({ message: "User not found" });
+      res.status(404).json({ message: "User not found" });
+      return;
     }
 
     res.status(200).json({ message: "User updated successfully", updatedUser });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Server error", error });
   }
 };

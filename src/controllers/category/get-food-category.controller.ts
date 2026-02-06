@@ -6,19 +6,21 @@ const getFoodCategory = async (req: Request, res: Response) => {
     const foodCategory = req.body.categoryName;
 
     if (!foodCategory) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         message: "Category name is required",
       });
+      return;
     }
     const foodCategoryData = await foodCategoryModel.findOne({
       categoryName: foodCategory,
     });
     if (!foodCategoryData) {
-      return res.status(404).json({
+      res.status(404).json({
         success: false,
         message: "Food category not found",
       });
+      return;
     }
     res.status(200).json({
       success: true,

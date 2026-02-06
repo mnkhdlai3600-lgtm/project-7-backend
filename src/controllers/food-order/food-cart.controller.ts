@@ -9,16 +9,16 @@ export const createFoodCart = async (req: Request, res: Response) => {
     const { user_id, food_id, quantity } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(user_id))
-      return res.status(400).json({ message: "Invalid user_id" });
+      res.status(400).json({ message: "Invalid user_id" });
 
     if (!mongoose.Types.ObjectId.isValid(food_id))
-      return res.status(400).json({ message: "Invalid food_id" });
+      res.status(400).json({ message: "Invalid food_id" });
 
     if (!quantity || quantity <= 0)
-      return res.status(400).json({ message: "Invalid quantity" });
+      res.status(400).json({ message: "Invalid quantity" });
 
     const food = await FoodModel.findById(food_id);
-    if (!food) return res.status(404).json({ message: "Food not found" });
+    if (!food) res.status(404).json({ message: "Food not found" });
 
     const cart = await foodCartModel.create({
       user_id,

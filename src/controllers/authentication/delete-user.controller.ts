@@ -7,26 +7,29 @@ export const deleteUser = async (req: Request, res: Response) => {
     const { id } = req.body;
 
     if (!id) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         message: "User ID is required in request body",
       });
+      return;
     }
 
     if (!mongoose.Types.ObjectId.isValid(id as string)) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         message: "Invalid ID format",
       });
+      return;
     }
 
     const deletedUser = await UserModel.findByIdAndDelete(id);
 
     if (!deletedUser) {
-      return res.status(404).json({
+      res.status(404).json({
         success: false,
         message: "User not found",
       });
+      return;
     }
 
     res.status(200).json({
@@ -35,7 +38,7 @@ export const deleteUser = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     console.error(error);
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
       message: "Server error",
       error: error.message,

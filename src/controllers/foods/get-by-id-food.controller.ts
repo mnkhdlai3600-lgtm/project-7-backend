@@ -6,13 +6,13 @@ export const findByIdfood = async (req: Request, res: Response) => {
     const foodId = req.params.id;
 
     if (!foodId) {
-      return res.status(400).json({ message: "Food ID байхгүй байна" });
+      res.status(400).json({ message: "Food ID байхгүй байна" });
     }
 
     const foodById = await FoodModel.findById(foodId);
 
     if (!foodById) {
-      return res.status(404).json({ message: "Хоол олдсонгүй" });
+      res.status(404).json({ message: "Хоол олдсонгүй" });
     }
 
     res.status(200).json({ message: "Амжилттай олдлоо", foodById });

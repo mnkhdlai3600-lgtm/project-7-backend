@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { createFoodCategory } from "../controllers/category";
+import { authentication, authorization } from "../middlewares";
+import { userRoles } from "../schema";
+import { createFoodCategory } from "../controllers";
 import getFoodCategory from "../controllers/category/get-food-category.controller";
 import updateCategory from "../controllers/category/update-category.controller";
 import deleteCategory from "../controllers/category/delete-category.controller";
-import { authentication, authorization } from "../middlewares";
-import { userRoles } from "../schema";
 
 const categoryRouter = Router();
 

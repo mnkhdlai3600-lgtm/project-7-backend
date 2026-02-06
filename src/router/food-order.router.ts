@@ -1,4 +1,3 @@
-// routes/foodCart.ts
 import { Router } from "express";
 import { createFoodCart } from "../controllers";
 import getOrderedFoodController from "../controllers/food-order/get-oredered-food.controller";

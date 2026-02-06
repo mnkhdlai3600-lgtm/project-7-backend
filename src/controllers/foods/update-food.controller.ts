@@ -7,11 +7,11 @@ export const updateFood = async (req: Request, res: Response) => {
     const update = req.body;
 
     if (!id) {
-      return res.status(400).json({ message: "Хоолын ID заавал шаардлагатай" });
+      res.status(400).json({ message: "Хоолын ID заавал шаардлагатай" });
     }
 
     if (Object.keys(update).length === 0) {
-      return res.status(400).json({ message: "Шинэ мэдээлэл оруулна уу" });
+      res.status(400).json({ message: "Шинэ мэдээлэл оруулна уу" });
     }
 
     const updatedFood = await FoodModel.findByIdAndUpdate(id, update, {
@@ -19,7 +19,7 @@ export const updateFood = async (req: Request, res: Response) => {
     });
 
     if (!updatedFood) {
-      return res.status(404).json({ message: "Хоол олдсонгүй" });
+      res.status(404).json({ message: "Хоол олдсонгүй" });
     }
 
     res.status(200).json({

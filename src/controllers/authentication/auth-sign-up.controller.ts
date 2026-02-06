@@ -13,9 +13,10 @@ export const signUpController = async (req: Request, res: Response) => {
     const existingUser = await UserModel.findOne({ email });
 
     if (existingUser) {
-      return res.status(409).json({
+      res.status(409).json({
         message: "Username or email already exists",
       });
+      return;
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -34,13 +35,13 @@ export const signUpController = async (req: Request, res: Response) => {
       email,
       `${process.env.TEST_API}/authentication/verify-email?token=${token}`,
     );
-    return res.status(201).json({
+    res.status(201).json({
       success: true,
       message: "Verification email sent",
       data: newUser,
     });
   } catch (error) {
-    return res.status(500).json({
+    res.status(500).json({
       message: "Internal server error",
       error,
     });

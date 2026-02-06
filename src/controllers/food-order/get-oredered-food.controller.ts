@@ -6,7 +6,8 @@ const getOrderedFoodController = async (req: Request, res: Response) => {
     const { user_id } = req.params;
 
     if (!user_id) {
-      return res.status(400).json({ message: "User ID is required" });
+      res.status(400).json({ message: "User ID is required" });
+      return;
     }
 
     const orderedFood = await foodCartModel.findOne({
@@ -14,9 +15,8 @@ const getOrderedFoodController = async (req: Request, res: Response) => {
     });
 
     if (!orderedFood) {
-      return res
-        .status(404)
-        .json({ message: "No ordered food found for this user" });
+      res.status(404).json({ message: "No ordered food found for this user" });
+      return;
     }
 
     res.status(200).json({ data: orderedFood });

@@ -7,12 +7,14 @@ export const updatePasswordController = async (req: Request, res: Response) => {
     const { email, newPassword } = req.body;
 
     if (!email || !newPassword) {
-      return res.status(400).json({ message: "impormation required" });
+      res.status(400).json({ message: "impormation required" });
+      return;
     }
 
     const user = await userModel.findOne({ email });
     if (!user) {
-      return res.status(404).json({ message: "User not found." });
+      res.status(404).json({ message: "User not found." });
+      return;
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
@@ -22,12 +24,12 @@ export const updatePasswordController = async (req: Request, res: Response) => {
       { password: hashedPassword },
     );
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       message: "Your password updated",
     });
   } catch (error) {
     console.error("Update password error:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Internal server error" });
   }
 };

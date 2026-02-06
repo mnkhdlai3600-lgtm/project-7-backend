@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
   deleteUser,
   findUserEmail,
-  // resetPasswordRequestController,
+  resetPasswordRequestController,
   signInController,
   signUpController,
   updatePasswordController,
@@ -37,10 +37,10 @@ authenticationRouter.put(
   authentication,
   updateUserByEmail,
 );
-// authenticationRouter.post(
-//   "/reset-password-request",
-//   resetPasswordRequestController,
-// );
+authenticationRouter.post(
+  "/reset-password-request",
+  resetPasswordRequestController,
+);
 authenticationRouter.post(
   "/verify-reset-password",
   verifyResetPasswordController,

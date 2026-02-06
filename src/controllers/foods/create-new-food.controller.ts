@@ -5,13 +5,13 @@ export const createNewFood = async (req: Request, res: Response) => {
   try {
     const newFood = await FoodModel.create(req.body);
     console.log(newFood);
-    return res.status(201).json({
+    res.status(201).json({
       success: true,
       data: newFood,
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
       message: "Server error",
     });

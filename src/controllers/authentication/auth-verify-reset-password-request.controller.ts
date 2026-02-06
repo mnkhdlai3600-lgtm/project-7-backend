@@ -10,12 +10,14 @@ export const verifyResetPasswordController = async (
     const { email, otp } = req.body;
 
     if (!email || !otp) {
-      return res.status(400).json({ message: "Email bas OTP code alga!" });
+      res.status(400).json({ message: "Email bas OTP code alga!" });
+      return;
     }
 
     const user = await userModel.findOne({ email });
     if (!user) {
-      return res.status(404).json({ message: "user bdgue." });
+      res.status(404).json({ message: "user bdgue." });
+      return;
     }
 
     const otpData = await userOTPModel.findOne({
@@ -24,20 +26,21 @@ export const verifyResetPasswordController = async (
     });
 
     if (!otpData) {
-      return res.status(400).json({
+      res.status(400).json({
         message: "invalid otp eswel hugatsaa",
       });
+      return;
     }
 
     await userOTPModel.deleteOne({ _id: otpData._id });
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       message: "success",
       userId: user._id,
     });
   } catch (error) {
     console.error("Verification error:", error);
-    return res.status(500).json({ message: "Internal server error", error });
+    res.status(500).json({ message: "Internal server error", error });
   }
 };

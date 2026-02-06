@@ -7,22 +7,20 @@ export const findUserEmail = async (req: Request, res: Response) => {
     const UserId = req.params.id;
 
     if (!UserId) {
-      return res
-        .status(400)
-        .json({ message: "Имэйл хаяг заавал шаардлагатай" });
+      res.status(400).json({ message: "Имэйл хаяг заавал шаардлагатай" });
+      return;
     }
 
     const user = await UserModel.findById({ _id: UserId });
 
     if (!user) {
-      return res.status(404).json({ message: "Хэрэглэгч олдсонгүй" });
+      res.status(404).json({ message: "Хэрэглэгч олдсонгүй" });
+      return;
     }
 
-    return res
-      .status(200)
-      .json({ message: "Хэрэглэгч амжилттай олдлоо", data: user });
+    res.status(200).json({ message: "Хэрэглэгч амжилттай олдлоо", data: user });
   } catch (error: any) {
-    return res
+    res
       .status(500)
       .json({ message: "Серверийн алдаа гарлаа", error: error.message });
   }

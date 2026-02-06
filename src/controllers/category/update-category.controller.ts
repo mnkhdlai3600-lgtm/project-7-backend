@@ -7,10 +7,11 @@ const updateCategory = async (req: Request, res: Response) => {
     const { categoryName } = req.body;
 
     if (!categoryId || !categoryName) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         message: "Category ID and updated name are required",
       });
+      return;
     }
 
     const updatedCategory = await foodCategoryModel.findByIdAndUpdate(
@@ -20,10 +21,11 @@ const updateCategory = async (req: Request, res: Response) => {
     );
 
     if (!updatedCategory) {
-      return res.status(404).json({
+      res.status(404).json({
         success: false,
         message: "Category not found",
       });
+      return;
     }
 
     res.status(200).json({

@@ -7,7 +7,8 @@ export const refreshToken = (req: Request, res: Response) => {
   const { token: refreshToken } = req.query;
 
   if (!refreshToken) {
-    return res.status(401).json({ message: "Token!" });
+    res.status(401).json({ message: "Token!" });
+    return;
   }
 
   try {
@@ -19,7 +20,7 @@ export const refreshToken = (req: Request, res: Response) => {
       expiresIn: "7d",
     });
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       token: newToken,
       user: {
@@ -27,6 +28,6 @@ export const refreshToken = (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    return res.status(403).json({ message: "Token expired or invalid!" });
+    res.status(403).json({ message: "Token expired or invalid!" });
   }
 };

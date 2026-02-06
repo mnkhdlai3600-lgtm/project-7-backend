@@ -10,10 +10,12 @@ export const signInController = async (req: Request, res: Response) => {
 
     if (!user) {
       res.status(401).json({ message: "Invalid email or password" });
+      return;
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid email or password" });
+      res.status(401).json({ message: "Invalid email or password" });
+      return;
     }
 
     const token = jwt.sign(
