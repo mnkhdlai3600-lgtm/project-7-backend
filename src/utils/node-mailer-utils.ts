@@ -2,16 +2,14 @@ import { Resend } from "resend";
 import { configDotenv } from "dotenv";
 configDotenv();
 
-const { RESEND_API_KEY, AUTH_EMAIL } = process.env;
-
-const resend = new Resend(RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendVerificationEmail = async (
   reciever: string,
   verifyEmail: string,
 ) => {
   await resend.emails.send({
-    from: `Food Delivery <${AUTH_EMAIL || "onboarding@resend.dev"}>`,
+    from: "onboarding@resend.dev",
     to: reciever,
     subject: "Verify your email",
     html: `

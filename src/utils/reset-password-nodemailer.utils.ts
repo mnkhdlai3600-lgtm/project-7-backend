@@ -11,7 +11,7 @@ export const ResetPasswordVerificationEmail = async (
   await resend.emails.send({
     from: "onboarding@resent.dev",
     to: reciever,
-    subject: "Hello world",
+    subject: "OTP",
     html: `
       <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #f4f7f6;">
         <div style="max-width: 500px; margin: auto; background: white; padding: 40px; border-radius: 15px;">
