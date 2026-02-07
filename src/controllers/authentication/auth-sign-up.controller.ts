@@ -33,7 +33,7 @@ export const signUpController = async (req: Request, res: Response) => {
     console.log(token);
     await sendVerificationEmail(
       email,
-      `${process.env.TEST_API}/authentication/verify-email?token=${token}`,
+      `${process.env.CLIENT_API}/authentication/verify-email?token=${token}`,
     );
     res.status(201).json({
       success: true,
