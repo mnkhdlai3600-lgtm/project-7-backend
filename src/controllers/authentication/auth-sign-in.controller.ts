@@ -33,6 +33,3 @@ export const signInController = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Internal server error", error });
   }
 };
-
-// user token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRhcmtwdW1hMzYwMDBAZ21haWwuY29tIiwiX2lkIjoiNjk4NDA2ZmFkOWNmMjU1OTMxOTUzMDQ1IiwiaWF0IjoxNzcwMjYwMzA5fQ.0QxPL6koi1ILWuHD3-bWH-rb1VHQRkWtEqvNSde5LbY
-// admin token
