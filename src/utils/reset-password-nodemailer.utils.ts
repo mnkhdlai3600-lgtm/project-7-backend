@@ -2,21 +2,17 @@ import { Resend } from "resend";
 import * as dotenv from "dotenv";
 dotenv.config();
 
-const { RESEND_API_KEY, AUTH_EMAIL } = process.env;
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-const resend = new Resend(RESEND_API_KEY);
-
-// 2. Нууц үг сэргээх OTP код илгээх (Resend хувилбар)
 export const ResetPasswordVerificationEmail = async (
   reciever: string,
   otpCode: string,
 ) => {
-  try {
-    const { data, error } = await resend.emails.send({
-      from: `Food Delivery Team <${AUTH_EMAIL || "onboarding@resend.dev"}>`,
-      to: reciever,
-      subject: "Нууц үг сэргээх баталгаажуулах код",
-      html: `
+  await resend.emails.send({
+    from: "onboarding@resent.dev",
+    to: reciever,
+    subject: "Hello world",
+    html: `
       <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #f4f7f6;">
         <div style="max-width: 500px; margin: auto; background: white; padding: 40px; border-radius: 15px;">
           <h2 style="color: #333;">Нууц үг сэргээх</h2>
@@ -28,11 +24,5 @@ export const ResetPasswordVerificationEmail = async (
         </div>
       </div>
       `,
-    });
-
-    if (error) return console.error("Resend OTP Error:", error);
-    console.log("Reset Password Email Sent:", data);
-  } catch (err) {
-    console.error("Catch Error:", err);
-  }
+  });
 };

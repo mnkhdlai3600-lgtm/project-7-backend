@@ -10,12 +10,11 @@ export const sendVerificationEmail = async (
   reciever: string,
   verifyEmail: string,
 ) => {
-  try {
-    const { data, error } = await resend.emails.send({
-      from: `Food Delivery <${AUTH_EMAIL || "onboarding@resend.dev"}>`,
-      to: reciever,
-      subject: "Verify your email",
-      html: `
+  await resend.emails.send({
+    from: `Food Delivery <${AUTH_EMAIL || "onboarding@resend.dev"}>`,
+    to: reciever,
+    subject: "Verify your email",
+    html: `
         <div style="width:600px; margin:0 auto; background-color:rgb(164,212,228); padding:60px 20px; border-radius:20px; text-align:center;">
           <p style="font-size:18px; font-weight:600; margin-bottom:30px;">
             Welcome to our application! Please verify your email address.
@@ -25,11 +24,5 @@ export const sendVerificationEmail = async (
           </a>
         </div>
       `,
-    });
-
-    if (error) return console.error("Resend Error:", error);
-    console.log("Verification Email Sent:", data);
-  } catch (err) {
-    console.error("Catch Error:", err);
-  }
+  });
 };
