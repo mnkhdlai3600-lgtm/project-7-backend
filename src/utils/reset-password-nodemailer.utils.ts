@@ -6,13 +6,14 @@ const { RESEND_API_KEY, AUTH_EMAIL } = process.env;
 
 const resend = new Resend(RESEND_API_KEY);
 
+// 2. Нууц үг сэргээх OTP код илгээх (Resend хувилбар)
 export const ResetPasswordVerificationEmail = async (
   reciever: string,
   otpCode: string,
 ) => {
   try {
     const { data, error } = await resend.emails.send({
-      from: `Food Delivery Team <${AUTH_EMAIL}>`,
+      from: `Food Delivery Team <${AUTH_EMAIL || "onboarding@resend.dev"}>`,
       to: reciever,
       subject: "Нууц үг сэргээх баталгаажуулах код",
       html: `

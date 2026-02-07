@@ -12,7 +12,7 @@ export const sendVerificationEmail = async (
 ) => {
   try {
     const { data, error } = await resend.emails.send({
-      from: `Food Delivery <${AUTH_EMAIL}>`,
+      from: `Food Delivery <${AUTH_EMAIL || "onboarding@resend.dev"}>`,
       to: reciever,
       subject: "Verify your email",
       html: `
@@ -27,11 +27,8 @@ export const sendVerificationEmail = async (
       `,
     });
 
-    if (error) {
-      return console.error("Resend Error:", error);
-    }
-
-    console.log("Success:", data);
+    if (error) return console.error("Resend Error:", error);
+    console.log("Verification Email Sent:", data);
   } catch (err) {
     console.error("Catch Error:", err);
   }
