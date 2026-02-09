@@ -9,6 +9,7 @@ export const authentication = async (
 ) => {
   try {
     const authToken = req.headers.authorization;
+    console.log(authToken);
     if (!authToken) {
       res.status(400).json({ message: "invalid token1" });
       return;
