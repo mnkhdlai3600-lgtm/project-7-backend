@@ -34,8 +34,8 @@ export const authentication = async (
 
     const existingUser = await userModel.findById(userId);
 
-    if (existingUser) {
-      res.status(400).json({ message: "invalid token4", existingUser });
+    if (!existingUser) {
+      res.status(400).json({ message: "invalid token4" });
       return;
     }
     req.body.user = existingUser;
