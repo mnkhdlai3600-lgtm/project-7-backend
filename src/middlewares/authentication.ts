@@ -40,8 +40,7 @@ export const authentication = async (
     }
     req.body.user = existingUser;
 
-    // next();
-    res.status(200).send({ user: req.body });
+    next();
   } catch (error) {
     res.status(400).json({ message: "internar server error", error });
   }
