@@ -25,8 +25,8 @@ export const authentication = async (
       _id: string;
     };
 
-    if (verifiedToken._id) {
-      res.status(400).json({ message: "invalid token3", verifiedToken });
+    if (!verifiedToken._id) {
+      res.status(400).json({ message: "invalid token3" });
       return;
     }
 
@@ -34,8 +34,8 @@ export const authentication = async (
 
     const existingUser = await userModel.findById(userId);
 
-    if (!existingUser) {
-      res.status(400).json({ message: "invalid token4" });
+    if (existingUser) {
+      res.status(400).json({ message: "invalid token4", existingUser });
       return;
     }
     req.body.user = existingUser;
