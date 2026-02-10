@@ -25,8 +25,8 @@ export const authentication = async (
       _id: string;
     };
 
-    if (!verifiedToken._id) {
-      res.status(400).json({ message: "invalid token3" });
+    if (verifiedToken._id) {
+      res.status(400).json({ message: "invalid token3", verifiedToken });
       return;
     }
 
