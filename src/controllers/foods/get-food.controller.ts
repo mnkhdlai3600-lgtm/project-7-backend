@@ -3,7 +3,6 @@ import FoodModel from "../../schema/food.model";
 
 const getFood = async (req: Request, res: Response) => {
   try {
-    const {} = req.params;
     const foods = await FoodModel.find();
     res.status(200).json({
       success: true,
