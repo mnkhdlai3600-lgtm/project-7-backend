@@ -29,13 +29,13 @@ foodRouter.put(
   authorization(userRoles.Admin),
   updateFood,
 );
-foodRouter.get(
+foodRouter.post(
   "/get-by-id-food/:id",
   authentication,
   authorization(userRoles.Admin),
   findByIdfood,
 );
-foodRouter.get(
+foodRouter.post(
   "/get-food",
   authentication,
   authorization(userRoles.Admin),

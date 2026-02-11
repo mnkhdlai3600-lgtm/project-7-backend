@@ -9,7 +9,7 @@ export const authentication = async (
 ) => {
   try {
     const authToken = req.headers.authorization;
-    console.log(authToken);
+
     if (!authToken) {
       res.status(400).json({ message: "invalid token1" });
       return;
@@ -39,7 +39,7 @@ export const authentication = async (
       return;
     }
     req.body.user = existingUser;
-
+    console.log(existingUser);
     next();
   } catch (error) {
     res.status(400).json({ message: "internar server error", error });

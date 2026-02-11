@@ -3,13 +3,18 @@ import foodCategoryModel from "../../schema/foodCategory.model";
 
 export const createFoodCategory = async (req: Request, res: Response) => {
   try {
-    const { categoryName } = req.body;
+    const { categoryName, foods } = req.body;
+
     const existingCategory = await foodCategoryModel.findOne({ categoryName });
 
     if (!existingCategory) {
-      const createdCategory = await foodCategoryModel.create({ categoryName });
+      const createdCategory = await foodCategoryModel.create({
+        categoryName,
+        foods: foods || [],
+      });
+
       res.status(201).json({
-        message: "Food category created successfully",
+        message: "Food category created successfully with foods",
         data: createdCategory,
       });
     } else {
@@ -18,10 +23,6 @@ export const createFoodCategory = async (req: Request, res: Response) => {
       });
     }
   } catch (error) {
-    console.error("Create Food Category Error:", error);
-    res.status(500).json({
-      message: "Server error",
-      error,
-    });
+    res.status(500).json({ message: "Server error", error });
   }
 };
