@@ -12,9 +12,11 @@ const getFoodCategory = async (req: Request, res: Response) => {
       });
       return;
     }
-    const foodCategoryData = await foodCategoryModel.findOne({
-      categoryName: foodCategory,
-    });
+
+    const foodCategoryData = await foodCategoryModel
+      .findOne({ categoryName: foodCategory })
+      .populate("foodIds");
+
     if (!foodCategoryData) {
       res.status(404).json({
         success: false,
@@ -22,6 +24,7 @@ const getFoodCategory = async (req: Request, res: Response) => {
       });
       return;
     }
+
     res.status(200).json({
       success: true,
       data: foodCategoryData,
@@ -34,4 +37,5 @@ const getFoodCategory = async (req: Request, res: Response) => {
     });
   }
 };
+
 export default getFoodCategory;
