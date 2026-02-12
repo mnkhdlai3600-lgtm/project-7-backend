@@ -1,41 +1,21 @@
 import { Response, Request } from "express";
 import foodCategoryModel from "../../schema/foodCategory.model";
 
-const getFoodCategory = async (req: Request, res: Response) => {
+// Энэ функц баазад байгаа БҮХ категорийг авчирна
+export const getAllFoodCategories = async (req: Request, res: Response) => {
   try {
-    const foodCategory = req.body.categoryName;
-
-    if (!foodCategory) {
-      res.status(400).json({
-        success: false,
-        message: "Category name is required",
-      });
-      return;
-    }
-
-    const foodCategoryData = await foodCategoryModel
-      .findOne({ categoryName: foodCategory })
-      .populate("foodIds");
-
-    if (!foodCategoryData) {
-      res.status(404).json({
-        success: false,
-        message: "Food category not found",
-      });
-      return;
-    }
+    // find({}) гэвэл бүх өгөгдлийг шүүж авна
+    const allCategories = await foodCategoryModel.find({}).populate("foodIds"); // Таны Compass дээр foodId байвал "foodId" гэж засаарай
 
     res.status(200).json({
       success: true,
-      data: foodCategoryData,
+      data: allCategories, // Энэ нь [ {Appetizers}, {Salads}, ... ] гэсэн массив байна
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: "Бүх категорийг татахад алдаа гарлаа",
       error,
     });
   }
 };
-
-export default getFoodCategory;

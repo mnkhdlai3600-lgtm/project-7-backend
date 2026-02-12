@@ -1,8 +1,7 @@
 import { Router } from "express";
 import { authentication, authorization } from "../middlewares";
 import { userRoles } from "../schema";
-import { createFoodCategory } from "../controllers";
-import getFoodCategory from "../controllers/category/get-food-category.controller";
+import { createFoodCategory, getAllFoodCategories } from "../controllers";
 import updateCategory from "../controllers/category/update-category.controller";
 import deleteCategory from "../controllers/category/delete-category.controller";
 
@@ -14,12 +13,7 @@ categoryRouter.post(
   authorization(userRoles.Admin),
   createFoodCategory,
 );
-categoryRouter.get(
-  "/get-category",
-  authentication,
-  authorization(userRoles.Admin),
-  getFoodCategory,
-);
+categoryRouter.post("/get-category", getAllFoodCategories);
 categoryRouter.put(
   "/update-category/:categoryId",
   authentication,
