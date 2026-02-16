@@ -10,7 +10,7 @@ enum FoodOrderStatusEnum {
 const FoodCartItemSchema = new Schema(
   {
     food: { type: Schema.Types.ObjectId, ref: "Foods", required: true },
-    quantity: { type: Number, required: true },
+    quantity: { type: Number, required: true, min: 1 },
   },
   { _id: false },
 );
@@ -18,9 +18,7 @@ const FoodCartItemSchema = new Schema(
 const FoodCartSchema = new Schema(
   {
     user_id: { type: Schema.Types.ObjectId, ref: "Users", required: true },
-
     foodOrderitems: [FoodCartItemSchema],
-
     status: {
       type: String,
       enum: Object.values(FoodOrderStatusEnum),
@@ -30,4 +28,5 @@ const FoodCartSchema = new Schema(
   { timestamps: true },
 );
 
-export default models["food-carts"] || model("food-carts", FoodCartSchema);
+const FoodCart = models["food-carts"] || model("food-carts", FoodCartSchema);
+export default FoodCart;
