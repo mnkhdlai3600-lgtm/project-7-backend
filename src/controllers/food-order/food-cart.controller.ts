@@ -6,23 +6,15 @@ import UserModel from "../../schema/user.model";
 
 export const createFoodCart = async (req: Request, res: Response) => {
   try {
-    const { user_id, food_id, quantity } = req.body;
+    const { user_id, foodOrderitems } = req.body;
 
-    if (!mongoose.Types.ObjectId.isValid(user_id))
-      res.status(400).json({ message: "Invalid user_id" });
-
-    if (!mongoose.Types.ObjectId.isValid(food_id))
-      res.status(400).json({ message: "Invalid food_id" });
-
-    if (!quantity || quantity <= 0)
-      res.status(400).json({ message: "Invalid quantity" });
-
-    const food = await FoodModel.findById(food_id);
-    if (!food) res.status(404).json({ message: "Food not found" });
+    if (!mongoose.Types.ObjectId.isValid(user_id)) {
+      return res.status(400).json({ message: "user id obso" });
+    }
 
     const cart = await foodCartModel.create({
       user_id,
-      foodOrderitems: [{ food: food_id, quantity }],
+      foodOrderitems,
     });
 
     await UserModel.findByIdAndUpdate(user_id, {
@@ -33,11 +25,9 @@ export const createFoodCart = async (req: Request, res: Response) => {
       .findById(cart._id)
       .populate("foodOrderitems.food");
 
-    res.status(201).json({
-      message: "Food order created successfully",
-      data: populatedCart,
-    });
+    return res.status(200).json({ message: "success", populatedCart });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    console.error(error);
+    return res.status(500).json({ message: "Server error", error });
   }
 };

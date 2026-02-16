@@ -35,11 +35,6 @@ foodRouter.post(
   authorization(userRoles.Admin),
   findByIdfood,
 );
-foodRouter.post(
-  "/get-food",
-  authentication,
-  authorization(userRoles.Admin),
-  getFood,
-);
+foodRouter.post("/get-food", getFood);
 
 export default foodRouter;

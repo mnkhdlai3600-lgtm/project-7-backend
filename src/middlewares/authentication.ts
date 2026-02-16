@@ -38,8 +38,13 @@ export const authentication = async (
       res.status(400).json({ message: "invalid token4" });
       return;
     }
-    req.body.user = existingUser;
-    console.log(existingUser);
+    if (req.body) {
+      req.body.user = existingUser;
+    } else {
+      req.body = {};
+      req.body.user = existingUser;
+    }
+
     next();
   } catch (error) {
     res.status(400).json({ message: "internar server error", error });

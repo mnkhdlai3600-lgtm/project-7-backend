@@ -6,17 +6,10 @@ import { sendVerificationEmail } from "../../utils/node-mailer-utils";
 
 export const signUpController = async (req: Request, res: Response) => {
   try {
-    const { email, password, confirmPassword } = req.body;
+    const { email, password } = req.body;
 
-    if (!email || !password || !confirmPassword) {
+    if (!email || !password) {
       res.status(400).json({ message: "Бүх талбарыг бөглөнө үү." });
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      res
-        .status(400)
-        .json({ message: "Нууц үгнүүд хоорондоо таарахгүй байна." });
       return;
     }
 

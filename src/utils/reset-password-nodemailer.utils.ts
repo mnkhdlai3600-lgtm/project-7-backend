@@ -9,7 +9,7 @@ export const ResetPasswordVerificationEmail = async (
   otpCode: string,
 ) => {
   await resend.emails.send({
-    from: "onboarding@resent.dev",
+    from: "onboarding@resend.dev",
     to: reciever,
     subject: "OTP",
     html: `
