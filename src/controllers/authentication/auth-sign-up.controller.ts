@@ -37,7 +37,7 @@ export const signUpController = async (req: Request, res: Response) => {
 
     await sendVerificationEmail(
       email,
-      `${process.env.CLIENT_URL}/authentication/verify-email?token=${token}`,
+      `${process.env.CLIENT_URL}/verify-email?token=${token}`,
     );
 
     res.status(201).json({
