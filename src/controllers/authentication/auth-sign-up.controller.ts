@@ -13,37 +13,40 @@ export const signUpController = async (req: Request, res: Response) => {
       return;
     }
 
-    const userTTL = new Date(Date.now() + 5 * 60 * 1000);
     const existingUser = await UserModel.findOne({ email });
 
     if (existingUser) {
       res
         .status(409)
-        .json({ message: "Энэ имейл хаяг хэдийн бүртгэгдсэн байна." });
+        .json({ message: "Энэ имэйл хаяг хэдийн бүртгэгдсэн байна." });
       return;
     }
 
+    const userTTL = new Date(Date.now() + 5 * 60 * 1000);
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await UserModel.create({
       email,
       password: hashedPassword,
       ttl: userTTL,
+      isVerified: false,
     });
 
-    const token = jwt.sign({ email }, process.env.JWT_SECRET!, {
-      expiresIn: 600,
+    const verifyToken = jwt.sign({ email }, process.env.JWT_SECRET!, {
+      expiresIn: "10m",
     });
 
     await sendVerificationEmail(
       email,
-      `${process.env.CLIENT_URL}/verify-email?token=${token}`,
+      `${process.env.CLIENT_URL}/verify-email?token=${verifyToken}`,
     );
 
     res.status(201).json({
       success: true,
-      message: "Баталгаажуулах имейл илгээгдлээ.",
-      data: newUser,
+      message: "Баталгаажуулах имэйл илгээгдлээ.",
+      data: {
+        email: newUser.email,
+      },
     });
   } catch (error) {
     console.error("SIGNUP_ERROR:", error);
