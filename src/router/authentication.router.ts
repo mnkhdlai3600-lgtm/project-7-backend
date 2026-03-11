@@ -31,7 +31,7 @@ authenticationRouter.delete(
   authorization(userRoles.Admin),
   deleteUser,
 );
-authenticationRouter.get("/authentication/verify-email", verifyEmailController);
+authenticationRouter.get("/verify-email", verifyEmailController);
 authenticationRouter.put(
   "/update-user/:email",
   authentication,
