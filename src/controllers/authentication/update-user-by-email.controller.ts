@@ -6,9 +6,12 @@ export const updateCurrentUserController = async (
   res: Response,
 ) => {
   try {
-    const authUser = (req as any).user as { email?: string; _id?: string };
+    const authUser = req.body.user as {
+      _id?: string;
+      email?: string;
+    };
 
-    if (!authUser?.email) {
+    if (!authUser?._id) {
       res.status(401).json({ message: "Unauthorized" });
       return;
     }
@@ -22,8 +25,8 @@ export const updateCurrentUserController = async (
     if (user_age !== undefined) updates.user_age = user_age;
     if (address !== undefined) updates.address = address;
 
-    const updatedUser = await UserModel.findOneAndUpdate(
-      { email: authUser.email },
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      authUser._id,
       { $set: updates },
       { new: true },
     ).select("-password");
