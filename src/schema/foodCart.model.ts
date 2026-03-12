@@ -19,6 +19,7 @@ const FoodCartSchema = new Schema(
   {
     user_id: { type: Schema.Types.ObjectId, ref: "Users", required: true },
     foodOrderitems: [FoodCartItemSchema],
+    totalPrice: { type: Number, required: true, default: 0 },
     status: {
       type: String,
       enum: Object.values(FoodOrderStatusEnum),
