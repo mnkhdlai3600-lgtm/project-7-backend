@@ -5,8 +5,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "outDir": "dist",
-    "strict": true,
-    "typeRoots": ["./node_modules/@types", "./src/types"]
+    "strict": true
   },
   "include": ["src/**/*"]
 }
