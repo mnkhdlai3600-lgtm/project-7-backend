@@ -5,8 +5,8 @@ import {
   resetPasswordRequestController,
   signInController,
   signUpController,
+  updateCurrentUserController,
   updatePasswordController,
-  updateUserByEmail,
   verifyEmailController,
   verifyResetPasswordController,
 } from "../controllers/authentication";
@@ -33,9 +33,9 @@ authenticationRouter.delete(
 );
 authenticationRouter.get("/verify-email", verifyEmailController);
 authenticationRouter.put(
-  "/update-user/:email",
+  "/update-user",
   authentication,
-  updateUserByEmail,
+  updateCurrentUserController,
 );
 authenticationRouter.post(
   "/reset-password-request",

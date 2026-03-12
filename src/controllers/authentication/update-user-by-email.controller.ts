@@ -1,28 +1,60 @@
 import { Request, Response } from "express";
 import UserModel from "../../schema/user.model";
+import bcrypt from "bcrypt";
 
-export const updateUserByEmail = async (req: Request, res: Response) => {
+export const updateCurrentUserController = async (
+  req: Request,
+  res: Response,
+) => {
   try {
-    const userMail = req.params.email;
-    const updates = req.body;
+    const authUser = req.user as { email?: string; _id?: string };
 
-    if (!userMail) {
-      res.status(400).json({ message: "Email parameter is required" });
+    if (!authUser?.email) {
+      res.status(401).json({ message: "Unauthorized" });
       return;
     }
 
+    const { email, password, userName, phoneNumber } = req.body;
+
+    const updates: Record<string, unknown> = {};
+
+    if (userName !== undefined) updates.userName = userName;
+    if (phoneNumber !== undefined) updates.phoneNumber = phoneNumber;
+
+    if (email !== undefined) {
+      const existingUser = await UserModel.findOne({ email });
+
+      if (existingUser && existingUser.email !== authUser.email) {
+        res
+          .status(409)
+          .json({ message: "Энэ имэйл аль хэдийн ашиглагдаж байна." });
+        return;
+      }
+
+      updates.email = email;
+    }
+
+    if (password !== undefined) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      updates.password = hashedPassword;
+    }
+
     const updatedUser = await UserModel.findOneAndUpdate(
-      { email: userMail },
+      { email: authUser.email },
       { $set: updates },
       { new: true },
-    );
+    ).select("-password");
 
     if (!updatedUser) {
       res.status(404).json({ message: "User not found" });
       return;
     }
 
-    res.status(200).json({ message: "User updated successfully", updatedUser });
+    res.status(200).json({
+      success: true,
+      message: "User updated successfully",
+      data: updatedUser,
+    });
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }

@@ -5,8 +5,23 @@ export enum userRoles {
   Admin = "Admin",
 }
 
-const UserSchema = new Schema(
+type User = {
+  userName?: string;
+  email?: string;
+  phoneNumber?: number;
+  password?: string;
+  orderedFoods?: Schema.Types.ObjectId[];
+  ttl?: Date;
+  phone_verified?: boolean;
+  isVerified?: boolean;
+  user_age?: number;
+  address?: string;
+  role?: string;
+};
+
+const UserSchema = new Schema<User>(
   {
+    userName: { type: String },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
 
