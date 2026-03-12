@@ -12,13 +12,13 @@ import {
 } from "../controllers/authentication";
 import { authentication, authorization } from "../middlewares";
 import { userRoles } from "../schema";
-import { refreshToken } from "../controllers/authentication/auth-refresh-token.controller";
+import { refreshTokenController } from "../controllers/authentication/auth-refresh-token.controller";
 
 const authenticationRouter = Router();
 
 authenticationRouter.post("/sign-in", signInController);
 authenticationRouter.post("/sign-up", signUpController);
-authenticationRouter.get("/refresh-token", refreshToken);
+authenticationRouter.get("/refresh-token", refreshTokenController);
 authenticationRouter.get(
   "/find-user/:id",
   authentication,
