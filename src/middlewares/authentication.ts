@@ -11,42 +11,41 @@ export const authentication = async (
     const authToken = req.headers.authorization;
 
     if (!authToken) {
-      res.status(400).json({ message: "invalid token1" });
-      return;
-    }
-    if (!authToken.startsWith("Bearer")) {
-      res.status(400).json({ message: "invalid token2" });
+      res.status(401).json({ message: "invalid token1" });
       return;
     }
 
-    const token = authToken?.split(" ")[1];
+    if (!authToken.startsWith("Bearer ")) {
+      res.status(401).json({ message: "invalid token2" });
+      return;
+    }
+
+    const token = authToken.split(" ")[1];
 
     const verifiedToken = verify(token, process.env.JWT_SECRET!) as {
       _id: string;
+      email?: string;
     };
 
     if (!verifiedToken._id) {
-      res.status(400).json({ message: "invalid token3" });
+      res.status(401).json({ message: "invalid token3" });
       return;
     }
 
-    const userId = verifiedToken._id;
-
-    const existingUser = await userModel.findById(userId);
+    const existingUser = await userModel
+      .findById(verifiedToken._id)
+      .select("-password");
 
     if (!existingUser) {
-      res.status(400).json({ message: "invalid token4" });
+      res.status(401).json({ message: "invalid token4" });
       return;
     }
-    if (req.body) {
-      req.body.user = existingUser;
-    } else {
-      req.body = {};
-      req.body.user = existingUser;
-    }
+
+    (req as any).user = existingUser;
 
     next();
   } catch (error) {
-    res.status(400).json({ message: "internar server error", error });
+    console.error("AUTHENTICATION_ERROR:", error);
+    res.status(401).json({ message: "invalid token", error });
   }
 };

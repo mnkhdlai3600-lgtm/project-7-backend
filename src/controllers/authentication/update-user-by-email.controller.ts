@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import UserModel from "../../schema/user.model";
-import bcrypt from "bcrypt";
 
 export const updateCurrentUserController = async (
   req: Request,
@@ -14,8 +13,7 @@ export const updateCurrentUserController = async (
       return;
     }
 
-    const { email, password, userName, phoneNumber, user_age, address } =
-      req.body;
+    const { userName, phoneNumber, user_age, address } = req.body;
 
     const updates: Record<string, unknown> = {};
 
@@ -23,24 +21,6 @@ export const updateCurrentUserController = async (
     if (phoneNumber !== undefined) updates.phoneNumber = phoneNumber;
     if (user_age !== undefined) updates.user_age = user_age;
     if (address !== undefined) updates.address = address;
-
-    if (email !== undefined) {
-      const existingUser = await UserModel.findOne({ email });
-
-      if (existingUser && existingUser.email !== authUser.email) {
-        res.status(409).json({
-          message: "Энэ имэйл аль хэдийн ашиглагдаж байна.",
-        });
-        return;
-      }
-
-      updates.email = email;
-    }
-
-    if (password !== undefined) {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      updates.password = hashedPassword;
-    }
 
     const updatedUser = await UserModel.findOneAndUpdate(
       { email: authUser.email },
