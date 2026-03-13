@@ -6,23 +6,24 @@ export const getAllFoodCategories = async (req: Request, res: Response) => {
   try {
     const allCategories = await foodCategoryModel.find({});
 
-    const categoriesWithCount = await Promise.all(
+    const categoriesWithFoods = await Promise.all(
       allCategories.map(async (category) => {
-        const count = await FoodModel.countDocuments({
+        const foods = await FoodModel.find({
           categoryId: category._id,
         });
 
         return {
           _id: category._id,
           categoryName: category.categoryName,
-          count,
+          foodIds: foods,
+          count: foods.length,
         };
       }),
     );
 
     res.status(200).json({
       success: true,
-      data: categoriesWithCount,
+      data: categoriesWithFoods,
     });
   } catch (error) {
     res.status(500).json({
