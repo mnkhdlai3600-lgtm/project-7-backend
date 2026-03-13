@@ -19,18 +19,22 @@ export const createFoodCart = async (req: Request, res: Response) => {
     }
 
     for (const item of foodOrderitems) {
-      if (!item.food || !mongoose.Types.ObjectId.isValid(item.food)) {
-        res.status(400).json({ message: "Food id буруу байна" });
-        return;
-      }
-
-      if (!item.quantity || item.quantity < 1) {
-        res.status(400).json({ message: "Quantity буруу байна" });
+      if (
+        !item ||
+        !mongoose.Types.ObjectId.isValid(item.food) ||
+        typeof item.quantity !== "number" ||
+        item.quantity <= 0
+      ) {
+        res.status(400).json({
+          message: "foodOrderitems буруу байна",
+        });
         return;
       }
     }
 
-    const foodIds = foodOrderitems.map((item: { food: string }) => item.food);
+    const foodIds = foodOrderitems.map(
+      (item: { food: string; quantity: number }) => item.food,
+    );
 
     const foods = await FoodModel.find({
       _id: { $in: foodIds },
@@ -66,9 +70,9 @@ export const createFoodCart = async (req: Request, res: Response) => {
       .populate("foodOrderitems.food")
       .populate("user_id", "-password");
 
-    res.status(200).json({
+    res.status(201).json({
       message: "success",
-      populatedCart,
+      data: populatedCart,
     });
   } catch (error) {
     console.error("CREATE_FOOD_CART_ERROR:", error);
