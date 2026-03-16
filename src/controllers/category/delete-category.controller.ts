@@ -4,23 +4,28 @@ import foodCategoryModel from "../../schema/foodCategory.model";
 const deleteCategory = async (req: Request, res: Response) => {
   try {
     const { categoryId } = req.params;
+
     if (!categoryId) {
-      res.status(400).json({ message: "Category ID is required" });
-      return;
+      return res.status(400).json({ message: "Category ID is required" });
     }
 
-    const deleteCategory =
+    const deletedCategory =
       await foodCategoryModel.findByIdAndDelete(categoryId);
-    if (!deleteCategory) {
-      res.status(404).json({ message: "Category not found" });
-      return;
+
+    if (!deletedCategory) {
+      return res.status(404).json({ message: "Category not found" });
     }
 
-    res
-      .status(200)
-      .json({ message: "Category deleted successfully", data: deleteCategory });
+    return res.status(200).json({
+      message: "Category deleted successfully",
+      data: deletedCategory,
+    });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    return res.status(500).json({
+      message: "Internal server error",
+      error,
+    });
   }
 };
+
 export default deleteCategory;

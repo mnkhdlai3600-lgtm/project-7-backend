@@ -1,35 +1,43 @@
 import { Request, Response } from "express";
 import userModel from "../../schema/user.model";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export const updatePasswordController = async (req: Request, res: Response) => {
   try {
-    const { email, newPassword } = req.body;
+    const { token, newPassword } = req.body;
 
-    if (!email || !newPassword) {
-      res.status(400).json({ message: "impormation required" });
+    if (!token || !newPassword) {
+      res.status(400).json({ message: "Мэдээлэл дутуу байна." });
       return;
     }
 
-    const user = await userModel.findOne({ email });
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+      email: string;
+    };
+
+    const user = await userModel.findOne({ email: decoded.email });
+
     if (!user) {
-      res.status(404).json({ message: "User not found." });
+      res.status(404).json({ message: "Хэрэглэгч олдсонгүй." });
       return;
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
     await userModel.findOneAndUpdate(
-      { email: email },
+      { email: decoded.email },
       { password: hashedPassword },
     );
 
     res.status(200).json({
       success: true,
-      message: "Your password updated",
+      message: "Нууц үг амжилттай шинэчлэгдлээ.",
     });
   } catch (error) {
     console.error("Update password error:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(400).json({
+      message: "Token буруу эсвэл хугацаа нь дууссан байна.",
+    });
   }
 };

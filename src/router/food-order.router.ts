@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { createFoodCart } from "../controllers";
+import { createFoodCart, updateFoodCart } from "../controllers";
 import getOrderedFoodController from "../controllers/food-order/get-oredered-food.controller";
-import getAllOrderController from "../controllers/food-order/get-all-order.controller";
-import { updateFoodCart } from "../controllers/food-order/food-order-update.controller";
+
 import { authentication, authorization } from "../middlewares";
 import { userRoles } from "../schema";
+import getAllOrderController from "../controllers/food-order/get-all-order.controller";
 
 const foodCartRouter = Router();
 
@@ -21,7 +21,7 @@ foodCartRouter.get(
   authorization(userRoles.Admin),
   getAllOrderController,
 );
-foodCartRouter.patch(
+foodCartRouter.put(
   "/update-food-cart/:order_id",
   authentication,
   authorization(userRoles.Admin),

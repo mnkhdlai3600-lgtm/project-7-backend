@@ -29,12 +29,17 @@ foodRouter.put(
   authorization(userRoles.Admin),
   updateFood,
 );
+
 foodRouter.post(
   "/get-by-id-food/:id",
   authentication,
   authorization(userRoles.Admin),
   findByIdfood,
 );
+foodRouter.get("/test", (_req, res) => {
+  res.json({ ok: true });
+});
+
 foodRouter.post("/get-food", getFood);
 
 export default foodRouter;

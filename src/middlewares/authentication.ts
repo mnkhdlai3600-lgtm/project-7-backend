@@ -11,11 +11,12 @@ export const authentication = async (
     const authToken = req.headers.authorization;
 
     if (!authToken) {
-      res.status(400).json({ message: "invalid token1" });
+      res.status(400).json({ message: "Нэвтрэх токен олдсонгүй." });
       return;
     }
+
     if (!authToken.startsWith("Bearer")) {
-      res.status(400).json({ message: "invalid token2" });
+      res.status(400).json({ message: "Токены формат буруу байна." });
       return;
     }
 
@@ -26,7 +27,7 @@ export const authentication = async (
     };
 
     if (!verifiedToken._id) {
-      res.status(400).json({ message: "invalid token3" });
+      res.status(400).json({ message: "Токен хүчингүй байна." });
       return;
     }
 
@@ -35,9 +36,10 @@ export const authentication = async (
     const existingUser = await userModel.findById(userId);
 
     if (!existingUser) {
-      res.status(400).json({ message: "invalid token4" });
+      res.status(400).json({ message: "Хэрэглэгч олдсонгүй." });
       return;
     }
+
     if (req.body) {
       req.body.user = existingUser;
     } else {
@@ -47,6 +49,9 @@ export const authentication = async (
 
     next();
   } catch (error) {
-    res.status(400).json({ message: "internar server error", error });
+    res.status(400).json({
+      message: "Токен шалгах үед алдаа гарлаа.",
+      error,
+    });
   }
 };

@@ -3,7 +3,7 @@ export * from "./auth-sign-in.controller";
 export * from "./auth-sign-up.controller";
 export * from "./auth-verify-reset-password-request.controller";
 export * from "./delete-user.controller";
-export * from "./find-by-id-user.controller";
+export * from "./auth-current-user.controller";
 export * from "./update-user-by-email.controller";
 export * from "./verify-email.controller";
 export * from "./auth-updated-password.controller";

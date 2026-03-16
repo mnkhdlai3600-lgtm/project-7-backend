@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {
+  currentUser,
   deleteUser,
-  findUserEmail,
   resetPasswordRequestController,
   signInController,
   signUpController,
@@ -19,12 +19,7 @@ const authenticationRouter = Router();
 authenticationRouter.post("/sign-in", signInController);
 authenticationRouter.post("/sign-up", signUpController);
 authenticationRouter.get("/refresh-token", refreshTokenController);
-authenticationRouter.get(
-  "/find-user/:id",
-  authentication,
-  authorization(userRoles.Admin),
-  findUserEmail,
-);
+authenticationRouter.get("/current-user", authentication, currentUser);
 authenticationRouter.delete(
   "/delete-user",
   authentication,
@@ -45,10 +40,6 @@ authenticationRouter.post(
   "/verify-reset-password",
   verifyResetPasswordController,
 );
-authenticationRouter.put(
-  "/reset-password",
-
-  updatePasswordController,
-);
+authenticationRouter.put("/reset-password", updatePasswordController);
 
 export default authenticationRouter;

@@ -1,47 +1,76 @@
 import { Request, Response } from "express";
+import bcrypt from "bcrypt";
 import UserModel from "../../schema/user.model";
-import mongoose from "mongoose";
 
-export const deleteUser = async (req: Request, res: Response) => {
+type DeleteCurrentUserBody = {
+  password: string;
+};
+
+type AuthenticatedRequest = Request<unknown, unknown, DeleteCurrentUserBody> & {
+  user?: {
+    _id: string;
+    email?: string;
+  };
+};
+
+export const deleteUser = async (
+  req: AuthenticatedRequest,
+  res: Response,
+): Promise<void> => {
   try {
-    const { id } = req.body;
+    const userId = req.user?._id;
+    const { password } = req.body;
 
-    if (!id) {
-      res.status(400).json({
+    if (!userId) {
+      res.status(401).json({
         success: false,
-        message: "User ID is required in request body",
+        message: "Хэрэглэгч баталгаажаагүй байна",
       });
       return;
     }
 
-    if (!mongoose.Types.ObjectId.isValid(id as string)) {
+    if (!password || password.trim().length === 0) {
       res.status(400).json({
         success: false,
-        message: "Invalid ID format",
+        message: "Нууц үг заавал оруулна",
       });
       return;
     }
 
-    const deletedUser = await UserModel.findByIdAndDelete(id);
+    const user = await UserModel.findById(userId).select("+password");
 
-    if (!deletedUser) {
+    if (!user) {
       res.status(404).json({
         success: false,
-        message: "User not found",
+        message: "Хэрэглэгч олдсонгүй",
       });
       return;
     }
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordCorrect) {
+      res.status(401).json({
+        success: false,
+        message: "Нууц үг буруу байна",
+      });
+      return;
+    }
+
+    await UserModel.findByIdAndDelete(userId);
 
     res.status(200).json({
       success: true,
-      message: "User deleted successfully",
+      message: "Хэрэглэгч амжилттай устгагдлаа",
     });
-  } catch (error: any) {
-    console.error(error);
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Тодорхойгүй серверийн алдаа";
+
     res.status(500).json({
       success: false,
-      message: "Server error",
-      error: error.message,
+      message: "Серверийн алдаа гарлаа",
+      error: errorMessage,
     });
   }
 };
